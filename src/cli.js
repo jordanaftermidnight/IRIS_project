@@ -55,7 +55,7 @@ function parseArgs(args) {
  */
 function showHelp() {
   console.log(`
-🤖 Iris - Integrated Runtime Intelligence Service v2.4.0
+🤖 Iris - Integrated Runtime Intelligence Service v0.9.0
 ==========================================
 Cost-Optimized AI with Mistral-First Logic
 
@@ -110,6 +110,9 @@ EXAMPLES:
   iris file ./my-script.js --task=code --verbose
   iris providers
   iris health
+  iris cache-stats                      # Show cache performance
+  iris pool-stats                       # Show connection pool stats
+  iris performance                      # Show combined performance metrics
   iris update                           # Update to latest version
   iris --version                        # Show current version
 
@@ -169,7 +172,7 @@ async function runCLI() {
   try {
     // Initialize providers with startup message
     if (options.verbose) {
-      console.log('🚀 Starting Multi-AI Integration CLI...');
+      console.log('Starting Multi-AI Integration CLI...');
     }
     
     await ai.initializeProviders();
@@ -206,6 +209,18 @@ async function runCLI() {
 
       case 'config':
         await handleConfigCommand(ai, args.slice(1), options);
+        break;
+
+      case 'cache-stats':
+        await handleCacheStatsCommand(options);
+        break;
+
+      case 'pool-stats':
+        await handlePoolStatsCommand(options);
+        break;
+
+      case 'performance':
+        await handlePerformanceCommand(options);
         break;
 
       case 'clear':
@@ -462,7 +477,7 @@ async function handleStatusCommand(ai, options) {
   
   const status = await ai.getSystemStatus();
   
-  console.log(`\n🚀 System Information:`);
+  console.log(`\nSystem Information:`);
   console.log(`   Version: ${status.version}`);
   console.log(`   Timestamp: ${status.timestamp}`);
   
@@ -509,7 +524,7 @@ async function handleConfigCommand(ai, args, options) {
  */
 async function handleClearCommand(ai, options) {
   ai.clearContext();
-  console.log('✅ Conversation context cleared');
+  console.log('Conversation context cleared');
   
   if (options.verbose) {
     console.log('All conversation history has been removed from memory.');
@@ -670,7 +685,7 @@ async function handleUpdateCommand(options) {
     try {
       const behind = execSync('git rev-list HEAD..origin/main --count', { encoding: 'utf8' }).trim();
       if (behind === '0') {
-        console.log('✅ Iris is already up to date!');
+        console.log('IRIS is already up to date');
         return;
       }
       console.log(`📈 ${behind} update(s) available`);
@@ -701,7 +716,7 @@ async function handleUpdateCommand(options) {
     execSync('npm install -g .', { stdio: 'inherit' });
     
     // Verify update
-    console.log('\n✅ Update complete!');
+    console.log('\nUpdate complete');
     const newVersion = execSync('iris --version 2>/dev/null || echo "unknown"', { encoding: 'utf8' }).trim();
     console.log(`📦 Updated to: ${newVersion}`);
     
@@ -718,6 +733,122 @@ async function handleUpdateCommand(options) {
     console.log('2. npm install');  
     console.log('3. npm install -g .');
     console.log('\n📚 Full instructions: see INSTALL.md');
+  }
+}
+
+/**
+ * Handle cache stats command
+ */
+async function handleCacheStatsCommand(options) {
+  try {
+    const response = await fetch('http://localhost:3001/api/cache-stats');
+    if (!response.ok) {
+      console.error('❌ API server not running. Start with: npm run api');
+      return;
+    }
+    
+    const data = await response.json();
+    const stats = data.stats;
+    
+    console.log('📦 IRIS Cache Statistics');
+    console.log('========================');
+    console.log(`Hit Rate: ${stats.hitRate}`);
+    console.log(`Cache Hits: ${stats.hits}`);
+    console.log(`❌ Cache Misses: ${stats.misses}`);
+    console.log(`🗑️  Evictions: ${stats.evictions}`);
+    console.log(`📊 Cache Size: ${stats.size}/${stats.maxSize}`);
+    console.log(`⏰ TTL: ${stats.ttlMinutes} minutes`);
+    
+    if (options.verbose) {
+      console.log(`\n🕐 Timestamp: ${data.timestamp}`);
+    }
+  } catch (error) {
+    console.error('❌ Error fetching cache stats:', error.message);
+  }
+}
+
+/**
+ * Handle connection pool stats command
+ */
+async function handlePoolStatsCommand(options) {
+  try {
+    const response = await fetch('http://localhost:3001/api/pool-stats');
+    if (!response.ok) {
+      console.error('❌ API server not running. Start with: npm run api');
+      return;
+    }
+    
+    const data = await response.json();
+    const stats = data.stats;
+    
+    console.log('🔗 IRIS Connection Pool Statistics');
+    console.log('==================================');
+    console.log(`📈 Success Rate: ${stats.successRate}`);
+    console.log(`Successful Requests: ${stats.successfulRequests}`);
+    console.log(`❌ Failed Requests: ${stats.failedRequests}`);
+    console.log(`📊 Total Requests: ${stats.totalRequests}`);
+    console.log(`🔄 Active Connections: ${stats.activeConnections}`);
+    console.log(`⏳ Queue Length: ${stats.queueLength}`);
+    console.log(`⚡ Avg Response Time: ${stats.averageResponseTime.toFixed(2)}ms`);
+    
+    if (options.verbose) {
+      console.log(`\n🕐 Timestamp: ${data.timestamp}`);
+    }
+  } catch (error) {
+    console.error('❌ Error fetching pool stats:', error.message);
+  }
+}
+
+/**
+ * Handle performance stats command (combined)
+ */
+async function handlePerformanceCommand(options) {
+  try {
+    const response = await fetch('http://localhost:3001/api/performance-stats');
+    if (!response.ok) {
+      console.error('❌ API server not running. Start with: npm run api');
+      return;
+    }
+    
+    const data = await response.json();
+    const cache = data.cache;
+    const pool = data.connectionPool;
+    
+    console.log('IRIS Performance Dashboard');
+    console.log('=============================\n');
+    
+    console.log('📦 CACHE PERFORMANCE');
+    console.log(`   Hit Rate: ${cache.hitRate} | Size: ${cache.size}/${cache.maxSize}`);
+    console.log(`   Hits: ${cache.hits} | Misses: ${cache.misses} | Evictions: ${cache.evictions}\n`);
+    
+    console.log('🔗 CONNECTION POOL');
+    console.log(`   Success Rate: ${pool.successRate} | Active: ${pool.activeConnections}`);
+    console.log(`   Total Requests: ${pool.totalRequests} | Queue: ${pool.queueLength}`);
+    console.log(`   Avg Response: ${pool.averageResponseTime.toFixed(2)}ms\n`);
+    
+    // Performance grade calculation
+    const cacheHitRate = parseFloat(cache.hitRate.replace('%', ''));
+    const successRate = parseFloat(pool.successRate.replace('%', ''));
+    const avgResponseTime = pool.averageResponseTime;
+    
+    let grade = 'A+';
+    if (cacheHitRate < 50 || successRate < 95 || avgResponseTime > 2000) {
+      grade = 'A';
+    }
+    if (cacheHitRate < 30 || successRate < 90 || avgResponseTime > 5000) {
+      grade = 'B';
+    }
+    if (cacheHitRate < 10 || successRate < 80) {
+      grade = 'C';
+    }
+    
+    console.log(`🏆 Performance Grade: ${grade}`);
+    
+    if (options.verbose) {
+      console.log(`\n🕐 Last Updated: ${data.timestamp}`);
+    }
+  } catch (error) {
+    console.error('❌ Error fetching performance stats:', error.message);
   }
 }
 

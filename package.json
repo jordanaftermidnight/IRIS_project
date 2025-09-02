@@ -5,17 +5,23 @@
   "main": "src/enhanced-ai.js",
   "type": "module",
   "bin": {
-    "iris": "./src/enhanced-ai.js"
+    "iris": "./src/cli.js"
   },
   "preferGlobal": true,
   "scripts": {
     "start": "node src/enhanced-ai.js",
+    "demo": "node start-enhanced-demo.cjs",
+    "demo:simple": "node demo-start.cjs",
+    "api": "node iris-api-server.js",
     "test": "node tests/test-runner.js",
     "test:examples": "node examples/basic-usage.js",
     "dev": "node --watch src/enhanced-ai.js",
-    "health": "node src/enhanced-ai.js health",
-    "models": "node src/enhanced-ai.js models",
-    "providers": "node src/enhanced-ai.js providers",
+    "health": "node src/cli.js health",
+    "models": "node src/cli.js models", 
+    "providers": "node src/cli.js providers",
+    "cache-stats": "node src/cli.js cache-stats",
+    "pool-stats": "node src/cli.js pool-stats",
+    "performance": "node src/cli.js performance",
     "postinstall": "node setup.js",
     "setup": "node setup.js",
     "lint": "eslint src/ tests/ examples/",
@@ -49,6 +55,8 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.3",
     "@google/generative-ai": "^0.21.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "groq-sdk": "^0.26.0",
     "ollama": "^0.5.16",
     "openai": "^5.8.2"

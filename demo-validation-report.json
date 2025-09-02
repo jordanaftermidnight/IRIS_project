@@ -1,0 +1,99 @@
+{
+  "timestamp": "2025-09-01T21:46:02.223Z",
+  "score": 100,
+  "valid": true,
+  "details": {
+    "files": [
+      {
+        "file": "index.html",
+        "status": "valid",
+        "critical": true
+      },
+      {
+        "file": "styles.css",
+        "status": "valid",
+        "critical": true
+      },
+      {
+        "file": "iris-dashboard.js",
+        "status": "valid",
+        "critical": true
+      },
+      {
+        "file": "demo-start.cjs",
+        "status": "valid",
+        "critical": true
+      },
+      {
+        "file": "package.json",
+        "status": "valid",
+        "critical": true
+      },
+      {
+        "file": ".env.example",
+        "status": "valid",
+        "critical": false
+      },
+      {
+        "file": "DEMO_USER_GUIDE.md",
+        "status": "valid",
+        "critical": false
+      },
+      {
+        "file": "QUICK_SETUP_GUIDE.md",
+        "status": "valid",
+        "critical": false
+      }
+    ],
+    "dependencies": [
+      {
+        "name": "Node.js",
+        "valid": true,
+        "result": "v24.3.0"
+      },
+      {
+        "name": "HTTP Server Capability",
+        "valid": true,
+        "result": 60692
+      },
+      {
+        "name": "File System Access",
+        "valid": true,
+        "result": true
+      }
+    ],
+    "functionality": [
+      {
+        "name": "Dashboard HTML Structure",
+        "valid": true
+      },
+      {
+        "name": "JavaScript Classes",
+        "valid": true
+      },
+      {
+        "name": "CSS Styling System",
+        "valid": true
+      },
+      {
+        "name": "Demo Control Buttons",
+        "valid": true
+      }
+    ],
+    "performance": [
+      {
+        "name": "File Size Optimization",
+        "valid": true
+      },
+      {
+        "name": "Memory Usage Simulation",
+        "valid": true
+      },
+      {
+        "name": "Startup Time Check",
+        "valid": true
+      }
+    ],
+    "overall": true
+  }
+}

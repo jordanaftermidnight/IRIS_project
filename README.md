@@ -1,6 +1,8 @@
-# 🚀 Iris - Integrated Runtime Intelligence Service
+# IRIS - Integrated Runtime Intelligence Service
 
 **Professional AI Development Assistant with Multi-Provider Intelligence**
+
+*Created by Jordan After Midnight*
 
 [![Version](https://img.shields.io/badge/version-0.9.0--beta-orange.svg)](package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -9,25 +11,25 @@
 
 ---
 
-## 🎯 **What is Iris?**
+## What is IRIS?
 
-Iris is a **professional AI development assistant** that provides **IDE-level intelligence** with multi-provider AI consultation. It combines the power of 5 AI providers with intelligent caching, local processing options, and universal compatibility across any editor or platform.
+IRIS is a professional AI development assistant that provides IDE-level intelligence with multi-provider AI consultation. It combines the power of 5 AI providers with intelligent caching, local processing options, and universal compatibility across any editor or platform.
 
-### **🚀 Key Features**
-- **🧠 Multi-AI Intelligence** - 5 providers with intelligent routing
-- **⚡ 85%+ Cache Hit Rate** - Instant responses for repeated queries  
-- **🏠 Local Processing** - Privacy-focused with Ollama support
-- **🔧 Professional IDE Tools** - Code completion, debugging, refactoring
-- **🔄 Universal Compatibility** - Works with any editor/IDE
-- **💰 Cost Optimized** - Mistral-first approach minimizes API costs
+### Key Features
+- **Multi-AI Intelligence** - 5 providers with intelligent routing
+- **High Cache Hit Rate** - Optimized responses for repeated queries  
+- **Local Processing** - Privacy-focused with Ollama support
+- **Professional IDE Tools** - Code completion, debugging, refactoring
+- **Universal Compatibility** - Works with any editor/IDE
+- **Cost Optimized** - Efficient provider selection minimizes API costs
 
 ---
 
-## 🛠️ **Quick Start**
+## Installation and Setup
 
-### **Installation**
+### Installation
 
-#### **Option 1: Install from GitHub (Recommended)**
+#### Option 1: Install from GitHub (Recommended)
 ```bash
 # Clone and install
 git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git
