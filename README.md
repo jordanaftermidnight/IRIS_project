@@ -201,6 +201,131 @@ iris chat "Analyze this image" --provider=gemini
 
 ---
 
+## 🔧 **Troubleshooting**
+
+### **Demo and API Launch Issues**
+
+**Problem**: `npm run api` doesn't show the web dashboard
+**Solution**: The `api` command only starts the backend API server. You need both API server AND web server:
+
+```bash
+# Option 1: Use full demo (recommended)
+npm run demo                    # Starts both API server + web server
+
+# Option 2: Manual setup
+# Terminal 1: API server
+npm run api                     # Backend on port 3001
+
+# Terminal 2: Web server  
+python3 -m http.server 8083     # Frontend on port 8083
+# OR
+npx http-server -p 8083
+
+# Then open: http://localhost:8083
+```
+
+**Problem**: Demo won't start or shows port conflicts
+**Solution**: Check for port conflicts and kill existing processes:
+
+```bash
+# Check what's using the ports
+lsof -i :3001                   # API server port
+lsof -i :8083                   # Web server port
+
+# Kill processes if needed
+kill -9 <PID>                   # Replace <PID> with actual process ID
+
+# Try alternative ports
+npm run api -- --port 3002     # Alternative API port
+python3 -m http.server 8084     # Alternative web port
+```
+
+**Problem**: API server starts but no providers available
+**Solution**: Ensure Ollama is running (minimum requirement):
+
+```bash
+# Install Ollama if not installed
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Start Ollama service
+ollama serve
+
+# Pull a model
+ollama pull mistral:7b
+
+# Verify IRIS can connect
+iris health
+```
+
+**Problem**: Demo shows errors or blank pages
+**Solution**: Browser and network troubleshooting:
+
+```bash
+# Check browser console for errors (F12 → Console)
+# Clear browser cache and cookies
+# Try different browser (Chrome, Firefox, Safari)
+# Verify both servers are running:
+
+curl http://localhost:3001/api/health    # API server check
+curl http://localhost:8083               # Web server check
+```
+
+### **Command Line Issues**
+
+**Problem**: `iris` command not found after installation
+**Solution**: Reinstall globally and check PATH:
+
+```bash
+# Reinstall globally
+npm install -g .
+
+# Check if iris is in PATH
+which iris
+echo $PATH
+
+# Manual linking if needed
+npm link
+```
+
+**Problem**: Permission errors on macOS/Linux
+**Solution**: Use sudo for global installation:
+
+```bash
+sudo npm install -g .
+# OR use npm prefix to avoid sudo
+npm config set prefix ~/.local
+export PATH=$PATH:~/.local/bin
+```
+
+### **Provider Connection Issues**
+
+**Problem**: All providers show "needs API key"
+**Solution**: This is expected! Ollama works without API keys:
+
+```bash
+# Check if Ollama is running
+ollama list                     # Should show installed models
+iris providers                 # Should show Ollama as "healthy"
+
+# Ollama is the free, local provider - others are optional
+```
+
+**Problem**: Slow responses or timeouts
+**Solution**: Optimize provider settings:
+
+```bash
+# Use fast providers for quick queries
+iris chat "Hello" --task=fast  # Routes to Groq if available
+
+# Check system resources
+iris performance               # Shows response times and metrics
+
+# Restart services if needed
+pkill -f ollama && ollama serve
+```
+
+---
+
 ## 📚 **Command Reference**
 
 ### **Core Commands**
