@@ -5,7 +5,7 @@ Thank you for your interest in contributing to Multi-AI Integration CLI! This do
 ## 🤝 How to Contribute
 
 ### Reporting Issues
-- Use the [GitHub issue tracker](https://github.com/jordanaftermidnight/multi-ai-mcp-integration/issues)
+- Use the [GitHub issue tracker](https://github.com/jordanaftermidnight/IRIS_project/issues)
 - Check existing issues before creating new ones
 - Provide detailed information including steps to reproduce
 - Include system information (OS, Node.js version, etc.)
@@ -29,7 +29,7 @@ Thank you for your interest in contributing to Multi-AI Integration CLI! This do
 
 ```bash
 # Clone your fork
-git clone https://github.com/yourusername/multi-ai-mcp-integration.git
+git clone https://github.com/jordanaftermidnight/IRIS_project.git
 cd multi-ai-integration
 
 # Install dependencies

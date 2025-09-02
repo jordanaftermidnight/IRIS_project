@@ -32,8 +32,8 @@ IRIS is a professional AI development assistant that provides IDE-level intellig
 #### Option 1: Install from GitHub (Recommended)
 ```bash
 # Clone and install
-git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git
-cd Iris_Integrated-Runtime-Intelligence-Service
+git clone https://github.com/jordanaftermidnight/IRIS_project.git
+cd IRIS_project
 npm install
 npm install -g .
 
@@ -41,7 +41,7 @@ npm install -g .
 iris help
 ```
 
-#### **Option 2: Direct npm install (future)**
+#### Option 2: Direct npm install (future)
 ```bash
 # Will be available when published to npm registry
 npm install -g iris-ai
@@ -50,31 +50,69 @@ npm install -g iris-ai
 iris help
 ```
 
-#### **Option 3: Run without global install**
+#### Option 3: Run without global install
 ```bash
 # Clone and run directly
-git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git
-cd Iris_Integrated-Runtime-Intelligence-Service
+git clone https://github.com/jordanaftermidnight/IRIS_project.git
+cd IRIS_project
 npm install
 npm start help
 ```
 
-### **Basic Usage**
+### Demo Options
+
+IRIS provides multiple ways to explore its capabilities:
+
+#### Option 1: Web Dashboard Demo (Recommended)
+```bash
+# Launch complete demo with web interface
+npm run demo
+
+# This will:
+# - Start IRIS API server on port 3002
+# - Launch web dashboard at http://localhost:8082
+# - Open browser automatically
+# - Show real-time analytics and interactive query interface
+```
+
+#### Option 2: Simple API Demo
+```bash
+# Start API server only
+npm run api
+
+# Test with curl (in another terminal):
+curl -X POST http://localhost:3001/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Hello IRIS", "provider": "auto"}'
+```
+
+#### Option 3: CLI Demo
+```bash
+# Basic CLI interaction
+iris chat "Hello, how can IRIS help me?"
+iris chat "Write a Python function to calculate fibonacci"
+iris chat "Explain machine learning concepts"
+
+# System monitoring
+iris health
+iris performance  
+iris cache-stats
+iris pool-stats
+```
+
+### Basic Usage
 ```bash
 # Chat with AI
 iris chat "Explain async/await in JavaScript"
 
-# Get code completion
-iris complete ./src/app.js 42 15
+# System status
+iris health
 
-# Generate commit message
-iris commit
+# Performance metrics  
+iris performance
 
-# Analyze workspace
-iris workspace
-
-# Update to latest version
-iris update
+# Cache statistics
+iris cache-stats
 ```
 
 ### **Setup AI Providers** (Optional)

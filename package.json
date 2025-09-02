@@ -46,12 +46,12 @@
   "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git"
+    "url": "https://github.com/jordanaftermidnight/IRIS_project.git"
   },
   "bugs": {
-    "url": "https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service/issues"
+    "url": "https://github.com/jordanaftermidnight/IRIS_project/issues"
   },
-  "homepage": "https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service#readme",
+  "homepage": "https://github.com/jordanaftermidnight/IRIS_project#readme",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.3",
     "@google/generative-ai": "^0.21.0",

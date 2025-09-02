@@ -150,9 +150,9 @@ This is the first public release. If you were using development versions:
 
 ## Support
 
-- 📖 [Documentation](https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service/wiki)
-- 🐛 [Report Issues](https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service/issues)
-- 💬 [Discussions](https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service/discussions)
+- 📖 [Documentation](https://github.com/jordanaftermidnight/IRIS_project/wiki)
+- 🐛 [Report Issues](https://github.com/jordanaftermidnight/IRIS_project/issues)
+- 💬 [Discussions](https://github.com/jordanaftermidnight/IRIS_project/discussions)
 
 ---
 
