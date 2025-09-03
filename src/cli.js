@@ -8,7 +8,7 @@ import { execSync } from 'child_process';
  * Enhanced Multi-AI Integration CLI
  * Command-line interface with improved error handling and features
  * 
- * @author Jordan After Midnight (concept and architecture)
+ * @author Jordan After Midnight
  * @author Claude AI (implementation assistance)
  * @copyright 2025 Jordan After Midnight. All rights reserved.
  */

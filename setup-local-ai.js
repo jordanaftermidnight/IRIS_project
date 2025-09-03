@@ -4,8 +4,7 @@
  * IRIS Local AI Setup Script
  * Automatically downloads and configures Mistral 7B as the default local AI model
  * 
- * @author Jordan After Midnight (concept and architecture)
- * @author Claude AI (implementation assistance)
+ * @author Jordan After Midnight
  * @copyright 2025 Jordan After Midnight. All rights reserved.
  */
 

@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
  * Code Integrity Protection System
  * Prevents unauthorized modifications and ensures ethical usage
  * 
- * @author Jordan After Midnight (concept and architecture)
+ * @author Jordan After Midnight
  * @author Claude AI (implementation assistance)
  * @copyright 2025 Jordan After Midnight. All rights reserved.
  */

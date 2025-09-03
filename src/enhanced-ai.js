@@ -4,7 +4,7 @@
  * Iris - Integrated Runtime Intelligence Service - Global Entry Point
  * Single command execution: iris
  * 
- * @author Jordan After Midnight (concept and architecture)
+ * @author Jordan After Midnight
  * @author Claude AI (implementation assistance)
  * @copyright 2025 Jordan After Midnight. All rights reserved.
  */

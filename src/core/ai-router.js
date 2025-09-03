@@ -7,7 +7,7 @@ import { usageMonitor } from './usage-monitor.js';
  * Smart AI Router - Intelligently routes requests to the best available provider
  * Enhanced with security and usage monitoring
  * 
- * @author Jordan After Midnight (concept and architecture)
+ * @author Jordan After Midnight
  * @author Claude AI (implementation assistance)
  * @copyright 2025 Jordan After Midnight. All rights reserved.
  */
