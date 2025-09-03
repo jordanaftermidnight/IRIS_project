@@ -4,7 +4,8 @@
  * IDE Integration Features for Iris
  * Professional development tools with intelligent code analysis and workspace awareness
  * 
- * @author Jordan After Midnight
+ * @author Jordan After Midnight (concept and architecture)
+ * @author Claude AI (implementation assistance)
  * @version 0.9.0
  */
 

@@ -4,7 +4,8 @@
  * API Request Validator
  * Validates and sanitizes API requests to prevent 400 errors
  * 
- * @author Jordan After Midnight
+ * @author Jordan After Midnight (concept and architecture)
+ * @author Claude AI (implementation assistance)
  * @copyright 2025 Jordan After Midnight. All rights reserved.
  */
 

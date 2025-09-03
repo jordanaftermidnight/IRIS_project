@@ -4,7 +4,8 @@
  * IDE Integration Commands for Iris
  * Professional development commands with intelligent code analysis
  * 
- * @author Jordan After Midnight
+ * @author Jordan After Midnight (concept and architecture)
+ * @author Claude AI (implementation assistance)
  * @version 0.9.0
  */
 

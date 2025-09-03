@@ -6,7 +6,8 @@ import { NeuralLearningSystem } from './neural-learning.js';
  * Self-Healing Error Handler for IRIS
  * Automatically recovers from API errors and adapts behavior
  * 
- * @author Jordan After Midnight
+ * @author Jordan After Midnight (concept and architecture)
+ * @author Claude AI (implementation assistance)
  * @copyright 2025 Jordan After Midnight. All rights reserved.
  */
 export class SelfHealingHandler {

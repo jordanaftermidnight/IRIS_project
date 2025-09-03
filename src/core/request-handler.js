@@ -3,7 +3,8 @@
 /**
  * Enhanced Request Handler with Timeout and Error Recovery
  * 
- * @author Jordan After Midnight
+ * @author Jordan After Midnight (concept and architecture)
+ * @author Claude AI (implementation assistance)
  * @copyright 2025 Jordan After Midnight. All rights reserved.
  */
 

@@ -8,7 +8,7 @@ import crypto from 'crypto';
  * Usage Monitoring and Anomaly Detection System
  * Tracks usage patterns and detects potential misuse
  * 
- * @author Jordan After Midnight
+ * @author Jordan After Midnight (concept and architecture)
  * @author Claude AI (implementation assistance)
  * @copyright 2025 Jordan After Midnight. All rights reserved.
  */
