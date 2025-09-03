@@ -101,12 +101,19 @@ export class ApiValidator {
    * Sanitize content
    */
   sanitizeContent(content) {
-    // Remove null bytes and control characters using string-based patterns
-    content = content.replace(/\u0000/g, '');
+    // Remove null bytes and control characters
+    content = content.replaceAll('\u0000', '');
     
-    // Remove control characters (avoiding ESLint control-regex rule)
-    const controlCharsPattern = new RegExp('[\u0000-\u0008\u000B-\u000C\u000E-\u001F\u007F]', 'g');
-    content = content.replace(controlCharsPattern, '');
+    // Remove control characters by building pattern dynamically
+    const controlRanges = [
+      '\u0001', '\u0002', '\u0003', '\u0004', '\u0005', '\u0006', '\u0007', '\u0008',
+      '\u000B', '\u000C', '\u000E', '\u000F', '\u0010', '\u0011', '\u0012', '\u0013',
+      '\u0014', '\u0015', '\u0016', '\u0017', '\u0018', '\u0019', '\u001A', '\u001B',
+      '\u001C', '\u001D', '\u001E', '\u001F', '\u007F'
+    ];
+    for (const char of controlRanges) {
+      content = content.replaceAll(char, '');
+    }
     
     // Fix common encoding issues
     content = content.replace(/[\u200B-\u200D\uFEFF]/g, ''); // Zero-width spaces
@@ -115,9 +122,10 @@ export class ApiValidator {
     try {
       content = Buffer.from(content, 'utf8').toString('utf8');
     } catch (e) {
-      // Fallback to ASCII if UTF-8 fails
-      const asciiPattern = new RegExp('[^\u0000-\u007F]', 'g');
-      content = content.replace(asciiPattern, '?');
+      // Fallback to ASCII if UTF-8 fails - remove non-ASCII chars
+      content = content.split('').map(char => 
+        char.charCodeAt(0) <= 127 ? char : '?'
+      ).join('');
     }
 
     return content.trim();

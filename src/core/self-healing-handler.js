@@ -26,10 +26,22 @@ export class SelfHealingHandler {
       {
         name: 'sanitize_input',
         apply: (message) => {
-          // Remove problematic characters using RegExp constructor
-          const controlPattern = new RegExp('[\u0000-\u001F\u007F-\u009F]', 'g');
+          // Remove problematic characters without regex
+          const controlChars = [
+            '\u0000', '\u0001', '\u0002', '\u0003', '\u0004', '\u0005', '\u0006', '\u0007', '\u0008',
+            '\u000E', '\u000F', '\u0010', '\u0011', '\u0012', '\u0013', '\u0014', '\u0015', '\u0016',
+            '\u0017', '\u0018', '\u0019', '\u001A', '\u001B', '\u001C', '\u001D', '\u001E', '\u001F',
+            '\u007F', '\u0080', '\u0081', '\u0082', '\u0083', '\u0084', '\u0085', '\u0086', '\u0087',
+            '\u0088', '\u0089', '\u008A', '\u008B', '\u008C', '\u008D', '\u008E', '\u008F', '\u0090',
+            '\u0091', '\u0092', '\u0093', '\u0094', '\u0095', '\u0096', '\u0097', '\u0098', '\u0099',
+            '\u009A', '\u009B', '\u009C', '\u009D', '\u009E', '\u009F'
+          ];
+          
+          for (const char of controlChars) {
+            message = message.replaceAll(char, '');
+          }
+          
           return message
-            .replace(controlPattern, '') // Control characters
             .replace(/[\u200B-\u200D\uFEFF]/g, '') // Zero-width characters
             .trim();
         }
@@ -52,8 +64,10 @@ export class SelfHealingHandler {
           try {
             return Buffer.from(message, 'utf8').toString('utf8');
           } catch (error) {
-            const asciiPattern = new RegExp('[^\u0000-\u007F]', 'g');
-            return message.replace(asciiPattern, ''); // ASCII only fallback
+            // ASCII only fallback - remove non-ASCII chars without regex
+            return message.split('').map(char => 
+              char.charCodeAt(0) <= 127 ? char : ''
+            ).join('');
           }
         }
       }
@@ -228,12 +242,31 @@ export class SelfHealingHandler {
       },
       {
         check: () => {
-          const controlPattern = new RegExp('[\u0000-\u001F\u007F-\u009F]');
-          return controlPattern.test(fixedMessage);
+          // Check for control characters without regex
+          const controlChars = [
+            '\u0000', '\u0001', '\u0002', '\u0003', '\u0004', '\u0005', '\u0006', '\u0007', '\u0008',
+            '\u000E', '\u000F', '\u0010', '\u0011', '\u0012', '\u0013', '\u0014', '\u0015', '\u0016',
+            '\u0017', '\u0018', '\u0019', '\u001A', '\u001B', '\u001C', '\u001D', '\u001E', '\u001F',
+            '\u007F', '\u0080', '\u0081', '\u0082', '\u0083', '\u0084', '\u0085', '\u0086', '\u0087',
+            '\u0088', '\u0089', '\u008A', '\u008B', '\u008C', '\u008D', '\u008E', '\u008F', '\u0090',
+            '\u0091', '\u0092', '\u0093', '\u0094', '\u0095', '\u0096', '\u0097', '\u0098', '\u0099',
+            '\u009A', '\u009B', '\u009C', '\u009D', '\u009E', '\u009F'
+          ];
+          return controlChars.some(char => fixedMessage.includes(char));
         },
         fix: () => {
-          const controlPattern = new RegExp('[\u0000-\u001F\u007F-\u009F]', 'g');
-          fixedMessage = fixedMessage.replace(controlPattern, '');
+          const controlChars = [
+            '\u0000', '\u0001', '\u0002', '\u0003', '\u0004', '\u0005', '\u0006', '\u0007', '\u0008',
+            '\u000E', '\u000F', '\u0010', '\u0011', '\u0012', '\u0013', '\u0014', '\u0015', '\u0016',
+            '\u0017', '\u0018', '\u0019', '\u001A', '\u001B', '\u001C', '\u001D', '\u001E', '\u001F',
+            '\u007F', '\u0080', '\u0081', '\u0082', '\u0083', '\u0084', '\u0085', '\u0086', '\u0087',
+            '\u0088', '\u0089', '\u008A', '\u008B', '\u008C', '\u008D', '\u008E', '\u008F', '\u0090',
+            '\u0091', '\u0092', '\u0093', '\u0094', '\u0095', '\u0096', '\u0097', '\u0098', '\u0099',
+            '\u009A', '\u009B', '\u009C', '\u009D', '\u009E', '\u009F'
+          ];
+          for (const char of controlChars) {
+            fixedMessage = fixedMessage.replaceAll(char, '');
+          }
           fixes.push('Removed control characters');
         }
       },
