@@ -128,10 +128,11 @@ export class ErrorHandler {
       case 'validateRequest':
         return this.validateAndFixRequest(context);
       
-      case 'backoffRetry':
+      case 'backoffRetry': {
         const delay = this.calculateBackoffDelay(context.provider);
         await new Promise(resolve => setTimeout(resolve, delay));
         return { ...context, retry: true };
+      }
       
       case 'switchProvider':
         return { ...context, switchProvider: true };

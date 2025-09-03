@@ -51,7 +51,7 @@ export class SelfHealingHandler {
           try {
             return Buffer.from(message, 'utf8').toString('utf8');
           } catch (error) {
-            return message.replace(/[^\x00-\x7F]/g, ''); // ASCII only fallback
+            return message.replace(/[^\u0000-\u007F]/g, ''); // ASCII only fallback
           }
         }
       }
