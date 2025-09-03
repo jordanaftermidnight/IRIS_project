@@ -372,9 +372,18 @@ async function initializeIRIS() {
     
     try {
         console.log('Initializing IRIS AI providers...');
-        await iris.initializeProviders();
-        isInitialized = true;
-        console.log('IRIS initialized successfully');
+        const status = await iris.initializeProviders();
+        
+        // Check if at least one provider is available
+        const hasAvailableProvider = Object.values(status).some(provider => provider.available === true);
+        
+        if (hasAvailableProvider) {
+            isInitialized = true;
+            console.log('IRIS initialized successfully');
+        } else {
+            console.warn('⚠️  No AI providers available, falling back to demo mode');
+            isInitialized = false;
+        }
     } catch (error) {
         console.warn('⚠️  IRIS initialization failed, falling back to demo mode:', error.message);
         isInitialized = false;
@@ -397,11 +406,13 @@ app.post('/api/chat', async (req, res) => {
 
         // Initialize if needed
         if (!isInitialized) {
+            console.log('🔄 IRIS not initialized, initializing now...');
             await initializeIRIS();
         }
 
         // If IRIS is available, use it with caching and connection pooling
         if (isInitialized) {
+            console.log('✅ Using IRIS for query:', message.substring(0, 50) + '...');
             // Check cache first
             const cacheKey = responseCache.generateKey(message, provider, taskType);
             const cachedResponse = responseCache.get(cacheKey);
@@ -450,6 +461,7 @@ app.post('/api/chat', async (req, res) => {
             return res.json(response);
         } else {
             // Fallback to enhanced demo responses
+            console.log('⚠️  IRIS not initialized, using demo response for:', message.substring(0, 50) + '...');
             const response = await generateSmartDemoResponse(message, provider);
             res.json(response);
         }

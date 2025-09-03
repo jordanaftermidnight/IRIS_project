@@ -4,7 +4,7 @@
 
 *Created by Jordan After Midnight*
 
-[![Version](https://img.shields.io/badge/version-0.9.0--beta-orange.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.9.0--production-green.svg)](package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 [![IDE Features](https://img.shields.io/badge/IDE%20Features-✅%20Integrated-blue.svg)]()
@@ -15,13 +15,25 @@
 
 IRIS is a professional AI development assistant that provides IDE-level intelligence with multi-provider AI consultation. It combines the power of 5 AI providers with intelligent caching, local processing options, and universal compatibility across any editor or platform.
 
-### Key Features
-- **Multi-AI Intelligence** - 5 providers with intelligent routing
-- **High Cache Hit Rate** - Optimized responses for repeated queries  
-- **Local Processing** - Privacy-focused with Ollama support
-- **Professional IDE Tools** - Code completion, debugging, refactoring
-- **Universal Compatibility** - Works with any editor/IDE
-- **Cost Optimized** - Efficient provider selection minimizes API costs
+### ✨ Key Features
+
+#### 🧠 **Smart AI Orchestration**
+- **Multi-Provider Intelligence** - Ollama (Mistral), OpenAI, Gemini, Groq, Claude
+- **Dynamic Model Selection** - Automatic fallback: Mistral → Llama3.1 → Llama3.2
+- **Real-Time Provider Detection** - Intelligent routing based on availability
+- **One-Click Local AI Setup** - Automated Mistral installation
+
+#### 🚀 **Production-Ready Infrastructure**  
+- **Visual Provider Activity** - Real-time status indicators and query flow
+- **Smart Caching System** - Optimized responses with 5-minute TTL
+- **Connection Pooling** - High-performance concurrent request handling
+- **Rate Limiting** - Built-in protection and request throttling
+
+#### 🛡️ **Privacy & Performance**
+- **Local-First Processing** - Ollama integration for offline AI
+- **Cost Optimization** - Intelligent provider selection minimizes API costs
+- **Universal Compatibility** - Works with any editor/IDE via API
+- **Web Dashboard** - Interactive query interface with analytics
 
 ---
 
@@ -65,25 +77,30 @@ IRIS provides multiple ways to explore its capabilities:
 
 #### Option 1: Web Dashboard Demo (Recommended)
 ```bash
-# Launch complete demo with web interface
-npm run demo
+# Setup local AI (Mistral) - one-time setup
+npm run setup:ai
 
-# This will:
-# - Start IRIS API server on port 3002
-# - Launch web dashboard at http://localhost:8082
-# - Open browser automatically
-# - Show real-time analytics and interactive query interface
-```
-
-#### Option 2: Simple API Demo
-```bash
-# Start API server only
+# Start IRIS API server with dashboard
 npm run api
 
-# Test with curl (in another terminal):
+# Dashboard available at: http://localhost:3001
+# - Real-time AI query interface
+# - Visual provider activity indicators  
+# - Provider health monitoring
+# - Response analytics and caching stats
+```
+
+#### Option 2: Quick API Testing
+```bash
+# Start API server
+npm run api
+
+# Test with real AI in another terminal:
 curl -X POST http://localhost:3001/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message": "Hello IRIS", "provider": "auto"}'
+  -d '{"message": "What is 2+2?", "provider": "auto"}'
+
+# Expected response: Real AI answer from local Mistral model
 ```
 
 #### Option 3: CLI Demo
@@ -123,8 +140,8 @@ export GROQ_API_KEY="your-key"      # Ultra-fast inference
 export GEMINI_API_KEY="your-key"    # Multimodal analysis
 export ANTHROPIC_API_KEY="your-key" # Advanced reasoning
 
-# Start local AI (free, private)
-ollama serve  # Runs Mistral/Qwen locally
+# Setup local AI (one-time, automated)
+npm run setup:ai  # Auto-installs and configures Mistral
 ```
 
 ---
@@ -198,6 +215,70 @@ iris chat "What is 2+2?" --task=fast
 # Force specific provider
 iris chat "Analyze this image" --provider=gemini
 ```
+
+---
+
+## 🔌 **API Reference**
+
+IRIS provides a RESTful API for integration with any application or service.
+
+### Base URL
+```
+http://localhost:3001
+```
+
+### Main Endpoints
+
+#### **POST** `/api/chat` - AI Query
+Send queries to IRIS AI system with intelligent provider routing.
+
+```bash
+curl -X POST http://localhost:3001/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "Explain quantum computing",
+    "provider": "auto",
+    "taskType": "reasoning"
+  }'
+```
+
+**Parameters:**
+- `message` (required): Your query text
+- `provider` (optional): `"auto"`, `"ollama"`, `"openai"`, `"gemini"`, `"groq"`, `"claude"`
+- `taskType` (optional): `"balanced"`, `"code"`, `"creative"`, `"fast"`, `"reasoning"`, `"complex"`
+
+**Response:**
+```json
+{
+  "response": "AI generated response...",
+  "provider": "ollama",
+  "responseTime": 245,
+  "timestamp": "2025-09-03T00:58:27.976Z",
+  "cached": false
+}
+```
+
+#### **GET** `/api/health` - System Status
+```bash
+curl http://localhost:3001/api/health
+```
+
+#### **GET** `/api/providers` - Available Providers
+```bash
+curl http://localhost:3001/api/providers
+```
+
+#### **GET** `/api/cache-stats` - Cache Performance
+```bash
+curl http://localhost:3001/api/cache-stats
+```
+
+### Dashboard Access
+Visit `http://localhost:3001` for the interactive web interface with:
+- Real-time query interface
+- Visual provider activity indicators
+- Performance metrics and analytics
+- Provider health monitoring
 
 ---
 

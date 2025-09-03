@@ -24,6 +24,7 @@
     "performance": "node src/cli.js performance",
     "postinstall": "node setup.js",
     "setup": "node setup.js",
+    "setup:ai": "node setup-local-ai.js",
     "lint": "eslint src/ examples/",
     "lint:fix": "eslint src/ examples/ --fix",
     "validate": "npm run lint && npm test",

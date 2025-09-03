@@ -21,20 +21,22 @@ export class OllamaProvider {
     this.name = 'ollama';
     this.available = !!Ollama;
     this.ollama = Ollama ? new Ollama({ host: options.host || 'http://localhost:11434' }) : null;
-    this.models = {
-      fast: 'llama3.2:latest',
-      balanced: 'mistral:7b',
-      creative: 'llama3.2:latest',
-      code: 'mistral:7b',
-      large: 'mistral:7b',
-      complex: 'mistral:7b',
-      reasoning: 'mistral:7b',
-      vision: 'llama3.2:latest',
-      coding_expert: 'mistral:7b',
-      ultra_large: 'mistral:7b'
+    this.availableModels = [];
+    this.modelPreferences = {
+      // Preferred models in order of preference
+      fast: ['mistral:7b', 'llama3.2:latest', 'llama3:latest', 'llama3.1:8b'],
+      balanced: ['mistral:7b', 'llama3.1:8b', 'llama3:latest', 'llama3.2:latest'],
+      creative: ['llama3.2:latest', 'mistral:7b', 'llama3.1:8b', 'llama3:latest'],
+      code: ['mistral:7b', 'llama3.1:8b', 'llama3:latest', 'llama3.2:latest'],
+      large: ['llama3.1:8b', 'mistral:7b', 'llama3:latest', 'llama3.2:latest'],
+      complex: ['mistral:7b', 'llama3.1:8b', 'llama3:latest', 'llama3.2:latest'],
+      reasoning: ['mistral:7b', 'llama3.1:8b', 'llama3:latest', 'llama3.2:latest']
     };
     this.priority = 1; // High priority for local models
     this.costPerToken = 0; // Free local models
+    
+    // Initialize available models
+    this.refreshAvailableModels();
   }
 
   async isAvailable() {
@@ -46,21 +48,43 @@ export class OllamaProvider {
     }
   }
 
-  async getAvailableModels() {
+  async refreshAvailableModels() {
     if (!this.available || !this.ollama) {
+      this.availableModels = [];
       return [];
     }
     
     try {
       const response = await this.ollama.list();
-      return response.models.map(m => m.name);
+      this.availableModels = response.models.map(m => m.name);
+      return this.availableModels;
     } catch (error) {
+      this.availableModels = [];
       return [];
     }
-    }
+  }
 
-  selectModel(taskType) {
-    return this.models[taskType] || this.models.balanced;
+  async getAvailableModels() {
+    return this.availableModels.length > 0 ? this.availableModels : await this.refreshAvailableModels();
+  }
+
+  selectModel(taskType = 'balanced') {
+    const preferences = this.modelPreferences[taskType] || this.modelPreferences.balanced;
+    
+    // Find first available preferred model
+    for (const preferredModel of preferences) {
+      if (this.availableModels.includes(preferredModel)) {
+        return preferredModel;
+      }
+    }
+    
+    // Fallback to any available model
+    if (this.availableModels.length > 0) {
+      return this.availableModels[0];
+    }
+    
+    // Ultimate fallback
+    return 'llama3:latest';
   }
 
   getSystemPrompt(taskType) {
@@ -81,9 +105,16 @@ export class OllamaProvider {
       throw new Error('Local AI provider not available. Check system configuration.');
     }
 
+    // Refresh available models if empty
+    if (this.availableModels.length === 0) {
+      await this.refreshAvailableModels();
+    }
+
     const taskType = options.taskType || 'balanced';
     const model = this.selectModel(taskType);
     const systemPrompt = this.getSystemPrompt(taskType);
+    
+    console.log(`🤖 Using Ollama model: ${model} for task: ${taskType}`);
 
     try {
       const response = await this.ollama.chat({
