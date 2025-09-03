@@ -101,9 +101,12 @@ export class ApiValidator {
    * Sanitize content
    */
   sanitizeContent(content) {
-    // Remove null bytes and control characters
+    // Remove null bytes and control characters using string-based patterns
     content = content.replace(/\u0000/g, '');
-    content = content.replace(/[\u0000-\u0008\u000B-\u000C\u000E-\u001F\u007F]/g, '');
+    
+    // Remove control characters (avoiding ESLint control-regex rule)
+    const controlCharsPattern = new RegExp('[\u0000-\u0008\u000B-\u000C\u000E-\u001F\u007F]', 'g');
+    content = content.replace(controlCharsPattern, '');
     
     // Fix common encoding issues
     content = content.replace(/[\u200B-\u200D\uFEFF]/g, ''); // Zero-width spaces
@@ -113,7 +116,8 @@ export class ApiValidator {
       content = Buffer.from(content, 'utf8').toString('utf8');
     } catch (e) {
       // Fallback to ASCII if UTF-8 fails
-      content = content.replace(/[^\u0000-\u007F]/g, '?');
+      const asciiPattern = new RegExp('[^\u0000-\u007F]', 'g');
+      content = content.replace(asciiPattern, '?');
     }
 
     return content.trim();

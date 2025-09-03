@@ -13,42 +13,42 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 
+// Helper function for recursive file listing
+function getAllFiles(dir, baseDir = dir, ignore = []) {
+  const files = [];
+  try {
+    const items = fs.readdirSync(dir);
+    
+    for (const item of items) {
+      const fullPath = path.join(dir, item);
+      const relativePath = path.relative(baseDir, fullPath);
+      
+      // Skip ignored patterns
+      if (ignore.some(pattern => relativePath.includes(pattern))) {
+        continue;
+      }
+      
+      const stat = fs.statSync(fullPath);
+      
+      if (stat.isDirectory()) {
+        files.push(...getAllFiles(fullPath, baseDir, ignore));
+      } else {
+        files.push(relativePath);
+      }
+    }
+  } catch (error) {
+    // Skip directories we can't read
+  }
+  
+  return files;
+}
+
 // Fallback glob implementation using fs
 function simpleGlob(pattern, options = {}) {
   try {
     const { cwd = process.cwd(), ignore = [] } = options;
     
-    // Simple recursive file listing
-    function getAllFiles(dir, baseDir = dir) {
-      const files = [];
-      try {
-        const items = fs.readdirSync(dir);
-        
-        for (const item of items) {
-          const fullPath = path.join(dir, item);
-          const relativePath = path.relative(baseDir, fullPath);
-          
-          // Skip ignored patterns
-          if (ignore.some(pattern => relativePath.includes(pattern))) {
-            continue;
-          }
-          
-          const stat = fs.statSync(fullPath);
-          
-          if (stat.isDirectory()) {
-            files.push(...getAllFiles(fullPath, baseDir));
-          } else {
-            files.push(relativePath);
-          }
-        }
-      } catch (error) {
-        // Skip directories we can't read
-      }
-      
-      return files;
-    }
-    
-    const allFiles = getAllFiles(cwd);
+    const allFiles = getAllFiles(cwd, cwd, ignore);
     
     // Simple pattern matching
     if (pattern === '**/*') {

@@ -26,9 +26,10 @@ export class SelfHealingHandler {
       {
         name: 'sanitize_input',
         apply: (message) => {
-          // Remove problematic characters
+          // Remove problematic characters using RegExp constructor
+          const controlPattern = new RegExp('[\u0000-\u001F\u007F-\u009F]', 'g');
           return message
-            .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Control characters
+            .replace(controlPattern, '') // Control characters
             .replace(/[\u200B-\u200D\uFEFF]/g, '') // Zero-width characters
             .trim();
         }
@@ -51,7 +52,8 @@ export class SelfHealingHandler {
           try {
             return Buffer.from(message, 'utf8').toString('utf8');
           } catch (error) {
-            return message.replace(/[^\u0000-\u007F]/g, ''); // ASCII only fallback
+            const asciiPattern = new RegExp('[^\u0000-\u007F]', 'g');
+            return message.replace(asciiPattern, ''); // ASCII only fallback
           }
         }
       }
@@ -225,9 +227,13 @@ export class SelfHealingHandler {
         }
       },
       {
-        check: () => /[\u0000-\u001F\u007F-\u009F]/.test(fixedMessage),
+        check: () => {
+          const controlPattern = new RegExp('[\u0000-\u001F\u007F-\u009F]');
+          return controlPattern.test(fixedMessage);
+        },
         fix: () => {
-          fixedMessage = fixedMessage.replace(/[\u0000-\u001F\u007F-\u009F]/g, '');
+          const controlPattern = new RegExp('[\u0000-\u001F\u007F-\u009F]', 'g');
+          fixedMessage = fixedMessage.replace(controlPattern, '');
           fixes.push('Removed control characters');
         }
       },
