@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: Phase 1 Visual Provider Activity Indicators</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+        .test-header {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        .test-controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .test-controls button {
+            margin: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-warning { background: #f59e0b; color: white; }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-secondary { background: #6b7280; color: white; }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1><i class="fas fa-flask"></i> Phase 1 Visual Provider Activity Test</h1>
+        <p>Test the visual provider activity indicators and query flow visualization</p>
+    </div>
+
+    <div class="test-controls">
+        <h3><i class="fas fa-gamepad"></i> Test Controls</h3>
+        <button class="btn-primary" onclick="testProviderActivity()">
+            <i class="fas fa-play"></i> Test Provider Activity
+        </button>
+        <button class="btn-success" onclick="testSuccessFlow()">
+            <i class="fas fa-check"></i> Test Success Flow
+        </button>
+        <button class="btn-warning" onclick="testErrorFlow()">
+            <i class="fas fa-exclamation-triangle"></i> Test Error Flow
+        </button>
+        <button class="btn-danger" onclick="testConnectionFailed()">
+            <i class="fas fa-times"></i> Test Connection Failed
+        </button>
+        <button class="btn-secondary" onclick="resetIndicators()">
+            <i class="fas fa-refresh"></i> Reset All
+        </button>
+    </div>
+
+    <!-- Query Section (required for provider activity panel insertion) -->
+    <section class="query-section">
+        <h2 id="query-heading"><i class="fas fa-comments" aria-hidden="true"></i> Chat with IRIS AI</h2>
+        <div class="query-container" role="region" aria-labelledby="query-heading">
+            <div class="query-input-group">
+                <textarea 
+                    id="queryInput" 
+                    placeholder="Enter your query here..." 
+                    aria-label="Query input"
+                    rows="4"
+                ></textarea>
+                <button id="submitQuery" type="button">
+                    <i class="fas fa-paper-plane"></i> Send Query
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script src="iris-dashboard.js"></script>
+    <script>
+        // Test functions for Phase 1 visual indicators
+        function testProviderActivity() {
+            console.log('🧪 Testing provider activity indicators...');
+            
+            // Simulate checking all providers
+            const providers = ['ollama', 'groq', 'gemini', 'openai', 'claude'];
+            
+            providers.forEach((provider, index) => {
+                setTimeout(() => {
+                    window.irisDashboard.updateProviderActivity(provider, 'Checking', 'Testing connection...');
+                }, index * 500);
+                
+                setTimeout(() => {
+                    const status = Math.random() > 0.5 ? 'Available' : 'Unavailable';
+                    const text = status === 'Available' ? 'Ready for queries' : 'Service offline';
+                    window.irisDashboard.updateProviderActivity(provider, status, text);
+                }, (index * 500) + 1500);
+            });
+        }
+        
+        function testSuccessFlow() {
+            console.log('🧪 Testing successful query flow...');
+            
+            // Reset first
+            window.irisDashboard.resetProviderActivities();
+            
+            // Step 1: Analyzing Query
+            setTimeout(() => {
+                window.irisDashboard.updateQueryFlowStep(1, true);
+            }, 100);
+            
+            // Step 2: Checking Providers
+            setTimeout(() => {
+                window.irisDashboard.updateQueryFlowStep(2, true);
+                window.irisDashboard.updateProviderActivity('ollama', 'Checking', 'Testing connection...');
+            }, 800);
+            
+            // Step 3: Processing
+            setTimeout(() => {
+                window.irisDashboard.updateQueryFlowStep(3, true);
+                window.irisDashboard.updateProviderActivity('ollama', 'Active', 'Generating response...');
+            }, 1500);
+            
+            // Step 4: Response Ready
+            setTimeout(() => {
+                window.irisDashboard.updateQueryFlowStep(4, true);
+                window.irisDashboard.updateProviderActivity('ollama', 'Success', 'Response delivered');
+            }, 2500);
+            
+            // Reset after 5 seconds
+            setTimeout(() => {
+                window.irisDashboard.resetProviderActivities();
+            }, 5000);
+        }
+        
+        function testErrorFlow() {
+            console.log('🧪 Testing error flow...');
+            
+            // Reset first
+            window.irisDashboard.resetProviderActivities();
+            
+            // Step 1-2: Normal start
+            setTimeout(() => {
+                window.irisDashboard.updateQueryFlowStep(1, true);
+            }, 100);
+            
+            setTimeout(() => {
+                window.irisDashboard.updateQueryFlowStep(2, true);
+                window.irisDashboard.updateProviderActivity('ollama', 'Checking', 'Testing connection...');
+            }, 800);
+            
+            // Error state
+            setTimeout(() => {
+                window.irisDashboard.updateProviderActivity('ollama', 'Error', 'Connection failed');
+            }, 2000);
+            
+            // Reset after 4 seconds
+            setTimeout(() => {
+                window.irisDashboard.resetProviderActivities();
+            }, 4000);
+        }
+        
+        function testConnectionFailed() {
+            console.log('🧪 Testing connection failed scenario...');
+            
+            const providers = ['ollama', 'groq', 'gemini', 'openai', 'claude'];
+            
+            providers.forEach((provider, index) => {
+                setTimeout(() => {
+                    window.irisDashboard.updateProviderActivity(provider, 'Unavailable', 'Connection failed');
+                }, index * 300);
+            });
+            
+            // Reset after 3 seconds
+            setTimeout(() => {
+                window.irisDashboard.resetProviderActivities();
+            }, 3000);
+        }
+        
+        function resetIndicators() {
+            console.log('🧪 Resetting all indicators...');
+            window.irisDashboard.resetProviderActivities();
+        }
+        
+        // Initialize dashboard when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('🧪 Test page loaded, checking for dashboard...');
+            
+            // Wait a bit for dashboard to initialize
+            setTimeout(() => {
+                if (window.irisDashboard) {
+                    console.log('✅ Dashboard found, ready for testing');
+                    // Auto-test provider activity on load
+                    setTimeout(testProviderActivity, 1000);
+                } else {
+                    console.error('❌ Dashboard not found - check iris-dashboard.js');
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>
