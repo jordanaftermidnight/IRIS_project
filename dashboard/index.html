@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="IRIS AI Orchestration System - Multi-provider AI management dashboard with real-time monitoring and intelligent query routing">
+    <title>IRIS AI Orchestration System - Demo Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header" role="banner">
+            <div class="header-left">
+                <h1><i class="fas fa-brain" aria-hidden="true"></i> IRIS AI Orchestration System</h1>
+                <span class="version" aria-label="Version 0.9.0 Production Ready">v0.9.0 - Production Ready</span>
+            </div>
+            <div class="header-right">
+                <div class="system-status" id="systemStatus" role="status" aria-live="polite">
+                    <span class="status-indicator" id="statusIndicator" aria-hidden="true"></span>
+                    <span id="statusText">Initializing...</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark theme" type="button">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main" role="main">
+            <!-- System Overview -->
+            <section class="overview-section" aria-labelledby="overview-heading">
+                <h2 id="overview-heading" class="visually-hidden">System Overview</h2>
+                <div class="metric-cards" role="group" aria-label="System metrics">
+                    <div class="metric-card" tabindex="0" role="button" aria-labelledby="health-title" aria-describedby="health-value health-status">
+                        <i class="fas fa-heartbeat" aria-hidden="true"></i>
+                        <h3 id="health-title">System Health</h3>
+                        <div class="metric-value" id="health-value" aria-live="polite">98%</div>
+                        <div class="metric-status excellent" id="health-status">Excellent</div>
+                    </div>
+                    <div class="metric-card" tabindex="0" role="button" aria-labelledby="response-title" aria-describedby="response-value response-status">
+                        <i class="fas fa-tachometer-alt" aria-hidden="true"></i>
+                        <h3 id="response-title">Avg Response Time</h3>
+                        <div class="metric-value" id="response-value" aria-live="polite">156ms</div>
+                        <div class="metric-status good" id="response-status">Good</div>
+                    </div>
+                    <div class="metric-card" tabindex="0" role="button" aria-labelledby="providers-title" aria-describedby="providers-value providers-status">
+                        <i class="fas fa-server" aria-hidden="true"></i>
+                        <h3 id="providers-title">Active Providers</h3>
+                        <div class="metric-value" id="providers-value" aria-live="polite">3/4</div>
+                        <div class="metric-status good" id="providers-status">Operational</div>
+                    </div>
+                    <div class="metric-card" tabindex="0" role="button" aria-labelledby="security-title" aria-describedby="security-value security-status">
+                        <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                        <h3 id="security-title">Security Status</h3>
+                        <div class="metric-value" id="security-value" aria-live="polite">Protected</div>
+                        <div class="metric-status excellent" id="security-status">Active</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Provider Status -->
+            <section class="providers-section" aria-labelledby="providers-heading">
+                <h2 id="providers-heading"><i class="fas fa-network-wired" aria-hidden="true"></i> Provider Health Status</h2>
+                <div class="providers-grid" id="providersGrid" role="region" aria-label="AI Provider status cards">
+                    <!-- Providers will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Interactive Query Interface -->
+            <section class="query-section" aria-labelledby="query-heading">
+                <h2 id="query-heading"><i class="fas fa-comments" aria-hidden="true"></i> Interactive Query Interface</h2>
+                <div class="query-interface" role="region" aria-labelledby="query-heading">
+                    <div class="query-input-area">
+                        <label for="queryInput" class="visually-hidden">Enter your AI query</label>
+                        <textarea 
+                            id="queryInput" 
+                            placeholder="Enter your query here... Try: 'Explain machine learning' or 'Write a Python function'"
+                            rows="4"
+                            aria-describedby="query-help"
+                            required
+                        ></textarea>
+                        <div id="query-help" class="visually-hidden">Type your question or request for the AI system. Examples: Explain machine learning or Write a Python function</div>
+                        <div class="query-controls">
+                            <label for="providerSelect" class="visually-hidden">Select AI Provider</label>
+                            <select id="providerSelect" aria-describedby="provider-help">
+                                <option value="auto">Auto Select (Recommended)</option>
+                                <option value="gemini">Google Gemini</option>
+                                <option value="groq">Groq</option>
+                                <option value="ollama">Ollama (Local)</option>
+                            </select>
+                            <div id="provider-help" class="visually-hidden">Choose which AI provider to use, or let the system automatically select the best option</div>
+                            <button id="submitQuery" class="submit-btn" type="button" aria-describedby="submit-help">
+                                <i class="fas fa-paper-plane" aria-hidden="true"></i> Send Query
+                            </button>
+                            <div id="submit-help" class="visually-hidden">Submit your query to the selected AI provider</div>
+                        </div>
+                    </div>
+                    <div class="query-response-area">
+                        <div class="response-header">
+                            <h3 id="response-heading">Response</h3>
+                            <div class="response-metrics" id="responseMetrics" aria-live="polite"></div>
+                        </div>
+                        <div class="response-content" id="responseContent" role="log" aria-live="polite" aria-labelledby="response-heading">
+                            <div class="placeholder">
+                                <i class="fas fa-robot" aria-hidden="true"></i>
+                                <p>Submit a query to see the IRIS system in action!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Real-time Analytics -->
+            <section class="analytics-section" aria-labelledby="analytics-heading">
+                <h2 id="analytics-heading" class="visually-hidden">Real-time Analytics</h2>
+                <div class="analytics-grid" role="region" aria-label="Analytics charts">
+                    <div class="chart-container">
+                        <h3 id="response-chart-title"><i class="fas fa-chart-line" aria-hidden="true"></i> Response Time Trend</h3>
+                        <canvas id="responseTimeChart" role="img" aria-labelledby="response-chart-title" aria-describedby="response-chart-desc"></canvas>
+                        <div id="response-chart-desc" class="visually-hidden">Line chart showing AI response time trends over time</div>
+                    </div>
+                    <div class="chart-container">
+                        <h3 id="usage-chart-title"><i class="fas fa-pie-chart" aria-hidden="true"></i> Provider Usage</h3>
+                        <canvas id="providerUsageChart" role="img" aria-labelledby="usage-chart-title" aria-describedby="usage-chart-desc"></canvas>
+                        <div id="usage-chart-desc" class="visually-hidden">Pie chart showing distribution of queries across different AI providers</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Demo Results -->
+            <section class="demo-results-section" aria-labelledby="demo-heading">
+                <h2 id="demo-heading"><i class="fas fa-flask" aria-hidden="true"></i> Demo Results</h2>
+                <div class="demo-results" id="demoResults" role="log" aria-live="polite" aria-labelledby="demo-heading">
+                    <div class="demo-result-placeholder">
+                        <i class="fas fa-play-circle" aria-hidden="true"></i>
+                        <p>Click any demo button to see detailed results here!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity Log -->
+            <section class="activity-section" aria-labelledby="activity-heading">
+                <h2 id="activity-heading"><i class="fas fa-history" aria-hidden="true"></i> System Activity Log</h2>
+                <div class="activity-log" id="activityLog" role="log" aria-live="polite" aria-labelledby="activity-heading">
+                    <!-- Activity entries will be populated by JavaScript -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Demo Controls -->
+        <nav class="demo-controls" id="demoControls" role="navigation" aria-label="Demo actions">
+            <button class="demo-btn" id="runHealthCheck" type="button" aria-describedby="health-check-desc">
+                <i class="fas fa-stethoscope" aria-hidden="true"></i> Run Health Check
+            </button>
+            <div id="health-check-desc" class="visually-hidden">Execute comprehensive system health diagnostic</div>
+            
+            <button class="demo-btn" id="simulateFailover" type="button" aria-describedby="failover-desc">
+                <i class="fas fa-exchange-alt" aria-hidden="true"></i> Simulate Failover
+            </button>
+            <div id="failover-desc" class="visually-hidden">Test automatic provider failover capabilities</div>
+            
+            <button class="demo-btn" id="testSecurity" type="button" aria-describedby="security-desc">
+                <i class="fas fa-shield-alt" aria-hidden="true"></i> Test Security
+            </button>
+            <div id="security-desc" class="visually-hidden">Demonstrate security threat detection and mitigation</div>
+            
+            <button class="demo-btn" id="showNeuralLearning" type="button" aria-describedby="learning-desc">
+                <i class="fas fa-brain" aria-hidden="true"></i> Neural Learning
+            </button>
+            <div id="learning-desc" class="visually-hidden">Show adaptive learning and optimization features</div>
+        </nav>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay" role="dialog" aria-modal="true" aria-labelledby="loading-text">
+            <div class="loading-spinner" aria-hidden="true"></div>
+            <p id="loading-text" aria-live="polite">Processing query...</p>
+        </div>
+
+        <!-- Notification System -->
+        <div class="notifications" id="notifications" role="alert" aria-live="assertive" aria-atomic="true"></div>
+    </div>
+
+    <script src="iris-dashboard.js"></script>
+</body>
+</html>

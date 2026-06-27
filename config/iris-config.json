@@ -1,0 +1,111 @@
+{
+  "_comment": "Configuration for Iris. Unknown keys produce warnings — see src/core/config-schema.js for the live schema.",
+  "providers": {
+    "ollama": {
+      "host": "http://localhost:11434",
+      "timeout": 30000,
+      "maxRetries": 3,
+      "priority": 1,
+      "models": {
+        "fast": "qwen3:4b",
+        "balanced": "mistral:7b",
+        "creative": "llama3.2:latest",
+        "code": "qwen2.5-coder:7b",
+        "large": "mistral:7b",
+        "complex": "mistral:7b",
+        "vision": "llama3.2:latest",
+        "reasoning": "mistral:7b"
+      }
+    },
+    "gemini": {
+      "priority": 2,
+      "models": {
+        "fast": "gemini-2.5-flash",
+        "balanced": "gemini-2.5-pro",
+        "creative": "gemini-2.5-pro",
+        "code": "gemini-2.5-pro",
+        "large": "gemini-2.5-pro",
+        "complex": "gemini-2.5-pro"
+      },
+      "rateLimit": {
+        "requestsPerMinute": 60,
+        "requestsPerDay": 1000
+      },
+      "timeout": 15000
+    },
+    "claude": {
+      "priority": 3,
+      "models": {
+        "fast": "claude-haiku-4-5-20251001",
+        "balanced": "claude-sonnet-4-6",
+        "creative": "claude-sonnet-4-6",
+        "code": "claude-sonnet-4-6",
+        "large": "claude-opus-4-7",
+        "complex": "claude-opus-4-7"
+      },
+      "maxTokens": 4096,
+      "rateLimit": {
+        "requestsPerMinute": 50,
+        "requestsPerDay": 800
+      },
+      "timeout": 20000
+    }
+  },
+  "routing": {
+    "preferLocal": true,
+    "maxCost": 0.05,
+    "costOptimization": true,
+    "fallbackOrder": ["ollama", "gemini", "claude"]
+  },
+  "context": {
+    "maxLength": 20
+  },
+  "memory": {
+    "enabled": false,
+    "host": "localhost",
+    "port": 8781
+  },
+  "server": {
+    "_comment": "Phase D: iris serve exposes IRIS as an MCP server on this port.",
+    "enabled": false,
+    "host": "127.0.0.1",
+    "port": 8782,
+    "agentId": "iris",
+    "authTokenEnv": "IRIS_AUTH_TOKEN",
+    "metricsEnabled": true
+  },
+  "_builtinProviderOverrides": {
+    "_comment": "Built-in providers (kimi, minimax, deepseek, grok, mistral, cerebras, together, openrouter, perplexity) auto-register when their env var is set. To override defaults, add a same-named entry under \"providers\" above. To disable a builtin, set { disabled: true }.",
+    "_example_override_kimi": {
+      "providers": {
+        "kimi": {
+          "models": { "balanced": "moonshot-v1-128k" }
+        }
+      }
+    },
+    "_example_disable_grok": {
+      "providers": {
+        "grok": { "disabled": true }
+      }
+    }
+  },
+  "_customProviderExamples": {
+    "_comment": "For services NOT in the builtin registry, add type: openai-compatible. Copy + remove the leading underscore.",
+    "_lmstudio": {
+      "type": "openai-compatible",
+      "baseURL": "http://localhost:1234/v1",
+      "allowNoAuth": true,
+      "priority": 1,
+      "description": "Local LM Studio server",
+      "models": { "balanced": "local-model" }
+    },
+    "_fireworks": {
+      "type": "openai-compatible",
+      "baseURL": "https://api.fireworks.ai/inference/v1",
+      "apiKeyEnv": "FIREWORKS_API_KEY",
+      "priority": 4,
+      "description": "Fireworks AI",
+      "models": { "balanced": "accounts/fireworks/models/llama-v3p3-70b-instruct" }
+    }
+  }
+}

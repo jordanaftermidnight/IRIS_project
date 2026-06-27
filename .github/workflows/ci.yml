@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run linter
+      run: npm run lint || echo "Linting not configured yet"
+      
+    - name: Run tests
+      run: npm test
+      
+    - name: Test CLI basic functionality
+      run: |
+        node src/enhanced-ai.js --help
+        node src/enhanced-ai.js health || echo "No providers available in CI"
+        
+    - name: Test examples
+      run: |
+        node examples/basic-usage.js || echo "Examples failed (expected without providers)"
+
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run security audit
+      run: npm audit --audit-level=moderate
+      
+    - name: Check for secrets
+      run: |
+        if grep -r "api_key\|token\|password" --include="*.js" src/ examples/ tests/ 2>/dev/null | grep -v "REDACTED" | grep -v "sanitize"; then
+          echo "Potential secrets found in code"
+          exit 1
+        else
+          echo "No hardcoded secrets found"
+        fi
+
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Verify package integrity
+      run: |
+        npm pack --dry-run
+        echo "Package structure verified"
+        
+    - name: Check file structure
+      run: |
+        echo "Checking required files..."
+        test -f package.json || (echo "Missing package.json" && exit 1)
+        test -f README.md || (echo "Missing README.md" && exit 1)
+        test -f LICENSE || (echo "Missing LICENSE" && exit 1)
+        test -f src/index.js || (echo "Missing main entry point" && exit 1)
+        test -f src/cli.js || (echo "Missing CLI" && exit 1)
+        test -d config || (echo "Missing config directory" && exit 1)
+        echo "All required files present"
