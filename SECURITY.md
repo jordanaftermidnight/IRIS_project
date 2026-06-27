@@ -199,9 +199,12 @@ curl -I http://localhost:3001/api/health
 ## **Security Contact**
 
 For security issues or vulnerabilities:
-- **Report via**: GitHub Issues (public)
-- **Sensitive issues**: Contact maintainer directly
-- **Response time**: 24-48 hours for security issues
+**Do NOT report security issues via public GitHub Issues.**
+
+- **Preferred**: Use [GitHub's private vulnerability reporting](https://github.com/jordanaftermidnight/IRIS_project/security/advisories/new) — encrypted, only visible to maintainers, integrates with the GitHub Security Advisory database.
+- **Alternative**: Email jordanaftermidnight@gmail.com with subject prefix `[IRIS SECURITY]`.
+- **Response time**: Acknowledged within 48 hours, triaged within 7 days.
+- **Disclosure**: Coordinated disclosure preferred — please give 90 days before public discussion unless the issue is already actively exploited.
 
 ---
 

@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 /**
- * Basic Usage Examples for Multi-AI Integration
+ * Basic Usage Examples for IRIS
  * Demonstrates core functionality and features
  */
 
 import MultiAI from '../src/index.js';
 
 async function runExamples() {
-  console.log('Multi-AI Integration - Basic Usage Examples\n');
+  console.log('IRIS — Basic Usage Examples\n');
 
   // Initialize the AI system
   const ai = new MultiAI();
@@ -44,7 +44,7 @@ async function runExamples() {
     // Example 3: Knowledge base usage
     console.log('\n4. Knowledge Base Example:');
     ai.addKnowledge('project_info', {
-      name: 'Multi-AI Integration',
+      name: 'IRIS',
       version: '2.0.0',
       description: 'Advanced multi-provider AI system'
     });
